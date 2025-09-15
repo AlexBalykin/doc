@@ -3,7 +3,7 @@ name: Deploy Starlight Docs
 on:
   push:
     branches:
-      - main  # пуш в основную ветку
+      - main  # меняй на основную ветку
 
 jobs:
   build-and-deploy:
@@ -11,8 +11,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-        with:
-          persist-credentials: false  # чтобы токен работал корректно
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -25,16 +23,8 @@ jobs:
       - name: Build site
         run: npm run build
 
-      - name: Configure Git
-        run: |
-          git config --global user.name "Alex Baly"
-          git config --global user.email "alex@example.com"
-
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4.0.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          commit_message: "Deploy Starlight Docs"
-          force_orphan: true
-          keep_files: true
+          publish_dir: dist
