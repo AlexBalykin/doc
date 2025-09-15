@@ -25,11 +25,12 @@ export default defineConfig({
     rehypePlugins: [
       () => {
         return (tree) => {
-          // Добавляем скрипт в начало каждой страницы
+          // Используем Astro.base для корректного пути
+          const base = '/doc/'; // или импортировать из config, если нужно
           tree.children.unshift({
             type: 'element',
             tagName: 'script',
-            properties: { src: '/q.js', type: 'module' },
+            properties: { src: `${base}q.js`, type: 'module' },
             children: [],
           });
         };
