@@ -3,28 +3,41 @@ name: Deploy Starlight Docs
 on:
   push:
     branches:
-      - main  # меняй на основную ветку
+      - main
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      # Чекаут без сохранения credentials
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
 
+      # Настройка Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
 
+      # Установка зависимостей
       - name: Install dependencies
         run: npm ci
 
+      # Сборка сайта
       - name: Build site
         run: npm run build
 
+      # Деплой на GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4.0.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: dist
+          publish_dir: ./dist
+          user_name: "Alex Baly"
+          user_email: "alex@example.com"
+          commit_message: "Deploy Starlight Docs"
+          force_orphan: true
+          keep_files: true
