@@ -3,35 +3,47 @@ name: Deploy Starlight Docs
 on:
   push:
     branches:
-      - main
+      - main  # пуши в основную ветку
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
+      # ✅ 1. Клонируем репозиторий
       - uses: actions/checkout@v3
 
+      # ✅ 2. Устанавливаем Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
 
+      # ✅ 3. Устанавливаем зависимости
       - name: Install dependencies
         run: npm ci
 
+      # ✅ 4. Строим сайт
       - name: Build site
         run: npm run build
 
+      # ✅ 5. Опционально: удаляем старую ветку gh-pages (чтобы README не остался)
       - name: Remove old gh-pages branch
         run: |
           git fetch origin gh-pages || true
           git push origin --delete gh-pages || true
 
+      # ✅ 6. Деплой на GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4.0.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: dist
-          force_orphan: true
+          force_orphan: true           # перезаписывает ветку полностью
           user_name: "Alex Baly"
           user_email: "alex@example.com"
