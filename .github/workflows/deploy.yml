@@ -3,17 +3,14 @@ name: Deploy Starlight Docs
 on:
   push:
     branches:
-      - main
+      - main  # меняй на основную ветку
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          persist-credentials: false  # важно для нового токена
+      - uses: actions/checkout@v3
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -30,9 +27,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4.0.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          user_name: "Alex Baly"
-          user_email: "alex@example.com"
-          commit_message: "Deploy Starlight Docs"
-          keep_files: true
-          force_orphan: true
+          publish_dir: dist
