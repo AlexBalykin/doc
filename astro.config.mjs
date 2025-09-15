@@ -3,7 +3,8 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 export default defineConfig({
-	base: '/tapbank-docs/',
+	site: 'https://AlexBalykin.gitlab.io',
+	base: '/',
   integrations: [
     starlight({
       title: 'TapBank',
