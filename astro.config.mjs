@@ -3,7 +3,7 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 export default defineConfig({
-	site: 'https://AlexBalykin.gitlab.io',
+	site: 'https://AlexBalykin.github.io',
 	base: '/',
   integrations: [
     starlight({
