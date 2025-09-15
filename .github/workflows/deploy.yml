@@ -1,30 +1,39 @@
-name: Deploy Starlight Docs
+name: Deploy to GitHub Pages
 
 on:
+  # Вызывать workflow при каждом пуше в ветку `main`
+  # Используете другое имя для ветки? Замените `main` на имя своей ветки
   push:
-    branches:
-      - main  # меняй на основную ветку
+    branches: [ main ]
+  # Разрешает запускать этот workflow вручную с вкладки Actions на GitHub.
+  workflow_dispatch:
+
+# Разрешить этому workflow клонировать репозиторий и создавать развёртывание Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout your repository using git
+        uses: actions/checkout@v4
+      - name: Install, build, and upload your site
+        uses: withastro/action@v3
+        # with:
+          # path: . # Корень вашего проекта Astro внутри репозитория (опционально)
+          # node-version: 20 # Версия Node, которую следует использовать для сборки сайта. По умолчанию 20. (опционально)
+          # package-manager: pnpm@latest # Менеджер пакетов Node, который следует использовать для установки зависимостей и сборки сайта. Автоматически определяется на основе лок-файла. (опционально)
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build site
-        run: npm run build
-
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4.0.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: dist
+        id: deployment
+        uses: actions/deploy-pages@v4
