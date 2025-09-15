@@ -3,7 +3,7 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 export default defineConfig({
-  //base: '/doc/', // Указываем имя репозитория с косой чертой
+  base: '/doc', // Указываем имя репозитория с косой чертой
   site: 'https://alexbalykin.github.io/doc', // URL сайта на GitHub Pages
   integrations: [
     starlight({
