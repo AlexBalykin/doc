@@ -1,10 +1,9 @@
-# .github/workflows/deploy.yml
-name: Deploy to GitHub Pages
+name: Deploy Starlight Docs
 
 on:
   push:
     branches:
-      - main  # Пуш в основную ветку
+      - main
 
 permissions:
   contents: read
@@ -14,12 +13,12 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    outputs:
+      artifact-path: ${{ steps.upload-artifact.outputs.artifact-path }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
@@ -30,14 +29,18 @@ jobs:
       - name: Build site
         run: npm run build
 
+      - name: Upload site artifact
+        id: upload-artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: github-pages
+          path: ./dist
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
     steps:
       - name: Deploy to GitHub Pages
-        id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact-name: github-pages
