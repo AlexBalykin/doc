@@ -3,8 +3,8 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 export default defineConfig({
-  base: '/', // корень сайта, чтобы ссылки работали
-  site: 'https://AlexBalykin.github.io/doc', // URL сайта на GitHub Pages
+  base: '/doc/',        // <- обязательно имя репозитория с косой чертой
+  site: 'https://alexbalykin.github.io/doc',
   integrations: [
     starlight({
       title: 'TapBank',
