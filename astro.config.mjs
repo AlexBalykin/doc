@@ -4,7 +4,7 @@ import starlight from '@astrojs/starlight';
 
 export default defineConfig({
     site: 'https://AlexBalykin.github.io',
-    base: '/github-pages'
+    base: '/doc'
   integrations: [
     starlight({
       title: 'TapBank',
